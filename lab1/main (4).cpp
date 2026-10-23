@@ -275,7 +275,7 @@ static int create_tabel()
     {
         return 0;
     }
-
+//g
     double radius = min_radius;
 
     double radius_array[row_count];
