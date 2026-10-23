@@ -214,37 +214,27 @@ static void print_the_table_bottom()
     cout << setfill('=') << setw(52) << "" << setfill(' ') << endl;
 }
 
-static bool get_radii(double &max_radius, double &min_radius)
+static void get_radii(double &max_radius, double &min_radius)
 {
     cout << "\nEnter the minimum and maximum radii of the circle" << endl
     << "min_radius =" << endl;
     cin >> min_radius;
     cout << "max_radius =" << endl;
     cin >> max_radius;
-
-    if (max_radius < min_radius)
-    {
-        return false;
-    }
-
-    return true;
 }
 
-static bool get_row_count(int &row_count)
+static int get_row_count()
 {
+    int row_count;
+
     cout << "Enter the number of table rows " << endl
     << "row_count =" << endl;
     cin >> row_count;
 
-    if (row_count < 1)
-    {
-        return false;
-    }
-
-    return true;
+    return row_count;
 }
 
-static void create_table_cykle(double radius_array[], double circumference_array[], double circle_area_array[], int const row_count)
+static void print_properties_table(double radius_array[], double circumference_array[], double circle_area_array[], int const row_count)
 {
     print_the_table_header();
 
@@ -259,20 +249,25 @@ static void create_table_cykle(double radius_array[], double circumference_array
     print_the_table_bottom();
 }
 
-static int create_tabel()
+static int create_table()
 {
     cout << "Exercise 4: " << endl << endl;
 
     double max_radius, min_radius;
-    int row_count;
 
-    if (!get_row_count(row_count))
+    int row_count = get_row_count();
+
+    get_radii(max_radius, min_radius);
+
+    if (max_radius < min_radius || max_radius < 0 || min_radius < 0)
     {
+        cout << "Error: wrong input" << endl << endl;
         return 0;
     }
 
-    if (!get_radii(max_radius, min_radius))
+    if (row_count < 0)
     {
+        cout << "Error: wrong input" << endl << endl;
         return 0;
     }
 
@@ -293,7 +288,7 @@ static int create_tabel()
         radius += radius_step;
     }
 
-    create_table_cykle(radius_array, circumference_array, circle_area_array, row_count);
+    print_properties_table(radius_array, circumference_array, circle_area_array, row_count);
 
     return 0;
 }
@@ -305,7 +300,7 @@ int main()
     //find_quadratic_roots();
     //check_date();
     //classify_triangle();
-    create_tabel();
+    create_table();
 
     return 0;
 }
