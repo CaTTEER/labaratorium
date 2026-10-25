@@ -6,8 +6,8 @@ Data: 21.10.2026
 */
 
 #include <iostream>
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
+#include <cmath>
 #include <iomanip>
 
 
@@ -15,13 +15,13 @@ using namespace std;
 
 static float get_true_delta(float const a, float const b, float const c)
 {
-    float delta = b * b - 4 * a * c;
+    float const delta = b * b - 4 * a * c;
 
     return delta;
 
 }
 
-static void find_quadratic_roots()
+static float find_quadratic_roots()
 {
     float a, b, c, root_1, root_2;
 
@@ -30,30 +30,35 @@ static void find_quadratic_roots()
 
     cin >> a >> b >> c;
 
-    float delta = get_true_delta(a, b, c);
-
-    if (a != 0 && delta >= 0)
+    if (a == 0)
     {
+        cout << "Error: Roots cannot be calculated";
+        return 0;
+    }
 
-        if (delta > 0)
-        {
-            root_1 = (-b - sqrt(delta)) / (2 * a);
-            root_2 = (-b + sqrt(delta)) / (2 * a);
-        }
-        else if (delta == 0)
-        {
-            root_1 = -b / (2 * a);
-            root_2 = root_1;
-        }
+    float const delta = get_true_delta(a, b, c);
 
-        cout << "Roots: " << endl
-        << "Root_1: " << root_1 << endl
-        << "Root_2: " << root_2 << endl;
+    if (delta > 0)
+    {
+        root_1 = (-b - sqrt(delta)) / (2 * a);
+        root_2 = (-b + sqrt(delta)) / (2 * a);
+    }
+    else if (delta == 0)
+    {
+        root_1 = -b / (2 * a);
+        root_2 = root_1;
     }
     else
     {
-        cout << "Roots cannot be calculated";
+        cout << "Error: No real roots";
+        return 0;
     }
+
+    cout << "Roots: " << endl
+    << "Root_1: " << root_1 << endl
+    << "Root_2: " << root_2 << endl;
+
+    return 0;
 }
 
 static bool is_valid_date(int day, int month, int year)
@@ -257,15 +262,15 @@ static int create_table()
 
     int row_count = get_row_count();
 
-    get_radii(max_radius, min_radius);
-
-    if (max_radius < min_radius || max_radius < 0 || min_radius < 0)
+    if (row_count <= 0)
     {
         cout << "Error: wrong input" << endl << endl;
         return 0;
     }
 
-    if (row_count < 0)
+    get_radii(max_radius, min_radius);
+
+    if (max_radius < min_radius || max_radius < 0 || min_radius < 0)
     {
         cout << "Error: wrong input" << endl << endl;
         return 0;
@@ -297,10 +302,10 @@ int main()
 {
     cout << "Autor: Ihar Yafimau (CZ/N 9:15)" << endl << endl;
 
-    //find_quadratic_roots();
+    find_quadratic_roots();
     //check_date();
     //classify_triangle();
-    create_table();
+    //create_table();
 
     return 0;
 }
