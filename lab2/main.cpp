@@ -9,11 +9,13 @@ Data: 28.10.2026
 #include <stdio.h>
 #include <iomanip>
 #include <cmath>
+#include <algorithm>
+#include <string>
 
 using namespace std;
 
-static int get_rows_table() {
-
+static int get_rows_table()
+{
     int row;
     cout << "Enter number of rows" << endl
     << "Rows = " << endl;
@@ -22,7 +24,8 @@ static int get_rows_table() {
     return row;
 }
 
-static int get_columns_table() {
+static int get_columns_table()
+{
     int column;
 
     cout << "Enter number of columns" << endl
@@ -32,49 +35,58 @@ static int get_columns_table() {
     return column;
 }
 
-static void first_row(int const row) {
+static void first_row(int const row)
+{
 
     cout << setw(4) << " " << "|";
 
-    for (int i = 1; i < row + 1; i++) {
+    for (int i = 1; i < row + 1; i++)
+    {
             cout << right << setw(4) << i;
     }
     cout << endl;
 }
 
-static void horizontal_line(int const row) {
+static void horizontal_line(int const row)
+{
 
     cout << setw(5) << "----|";
 
-    for (int i = 1; i < row + 1; i++) {
+    for (int i = 1; i < row + 1; i++)
+    {
         cout << setw(4) << "----";
     }
     cout << endl;
 }
 
-static void vertical_line(int const column, int const row) {
-    for (int i = 1; i < column + 1; i++ ) {
+static void vertical_line(int const column, int const row)
+ {
+    for (int i = 1; i < column + 1; i++ )
+    {
         cout << right << setw(3) << i << " |";
 
-        for (int i_1 = 1; i_1 < row + 1; i_1++) {
-            cout << right << setw(4) << i * i_1;
+        for (int j = 1; j < row + 1; j++)
+        {
+            cout << right << setw(4) << i * j;
         }
         cout << endl;
     }
 }
 
-static void multiplication_table() {
-
-    cout << "Exercise 1:" << endl;
+static void multiplication_table()
+{
+    cout << "Exercise 1:" << endl << endl;
 
     int const row = get_rows_table();
-    if (row <= 0 ) {
+    if (row <= 0 )
+    {
         cout << "Error: wrong input";
         return;
     }
 
     int const column = get_columns_table();
-    if (column <= 0) {
+    if (column <= 0)
+    {
         cout << "Error: wrong input";
         return;
     }
@@ -84,63 +96,119 @@ static void multiplication_table() {
     vertical_line(column, row);
 }
 
-static int get_number() {
-    int number;
+static long double get_number()
+{
+    long double number;
 
-    cout << "Enter number" << endl
-    << "Number = ";
+    cout << "Enter integer" << endl
+    << "Number = " << endl;
     cin >> number;
 
     return number;
 }
 
-static int get_digit_count(int number) {
+static int get_digit_count(unsigned long long number)
+{
     int digit_count = 0;
 
-    for (; number >= 1; digit_count++) {
+    for (; number >= 1; digit_count++)
+    {
         number /= 10;
     }
     return digit_count;
+
 }
 
-static int get_digit_sum(int number, int digit_count) {
-    int sum = 0;
-    for (int i = 1; i < digit_count; digit_count--) {
-        if (number != 0 ) {
-            int result = number / pow(10, digit_count - 1);
+static int get_digit_sum(unsigned long long number, int digit_count)
+{
+    int sum_result = 0;
 
-            sum += result;
-        }
+    for (; 0 < digit_count; digit_count--)
+    {
+        int const result = number / powl(10, digit_count - 1);
+        sum_result += result;
+
+        number = number - result * powl(10, digit_count - 1);
     }
-    return sum;
+
+    cout << endl;
+    return sum_result;
 }
 
-static void calculate_digit_sum() {
-    cout << "Exercise 2:" << endl;
+static unsigned long long get_binary_number(unsigned long long integer_number)
+{
+    string str_binary_number = "";
 
-    int number = get_number();
-    int digit_count = get_digit_count(number);
-    cout << get_digit_sum(number, digit_count);
+    while (integer_number > 0)
+    {
+        if (integer_number % 2 == 0) {
+            str_binary_number += "0";
+        }
+        else
+        {
+            str_binary_number += "1";
+        }
+        integer_number /= 2;
+    }
+    reverse(str_binary_number.begin(), str_binary_number.end());
+    unsigned long long binary_number = stoull(str_binary_number);
+
+    return binary_number;
 }
 
-int main() {
-    int exercise_num = 5;
+static void calculate_digit_sum()
+{
+    cout << "\nExercise 2:" << endl;
+
+    long double number = get_number();
+
+    if (number < 0 || number != floorl(number))
+{
+        cout << "Error: wrong input";
+        return;
+}
+    unsigned long long integer_number = static_cast<unsigned long long>(number);
+    int digit_count = get_digit_count(integer_number);
+    cout << endl << "Sum of digits of " << integer_number << ":" << get_digit_sum(integer_number, digit_count) << endl;
+
+    unsigned long long binary_number = get_binary_number(integer_number);
+    digit_count = get_digit_count(binary_number);
+    cout << endl << "Sum of binary digits of " << binary_number << ":" << get_digit_sum(binary_number, digit_count) << endl;
+}
+
+//zad3
+//do while
+//na początku liczymy, a potem sprawdzamy wyrazy ich warunek
+
+//zad 4
+//srand tylko jeden raz, na początku programu
+
+//zad 5
+// program pyta rozmiar klatki no i potem pyta o row or columns
+
+int main()
+{
+    int exercise_num = 6;
 
     cout << "Autor: Ihar Yafimau (CZ/N 9:15)" << endl;
 
-    while (exercise_num != 0) {
-        cout << "\nMENU" << endl << "Please enter number of exercise - 1, 2, 3, 4, or Exit - 0" << endl
-        << "Number of exercise: ";
+    while (exercise_num != 0)
+    {
+        cout << "\n\nMENU" << endl << "Please enter number of exercise - 1, 2, 3, 4, or Exit - 0" << endl
+        << "Number of exercise: " << endl;
         cin >> exercise_num;
 
-        switch (exercise_num) {
+        switch (exercise_num)
+        {
             case 1:
                 multiplication_table();
                 break;
+
             case 2:
                 calculate_digit_sum();
                 break;
         }
     }
+
     return 0;
 }
