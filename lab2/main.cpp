@@ -94,9 +94,9 @@ static void multiplication_table()
     vertical_line(column, row);
 }
 
-static int get_number()
+static long double get_number()
 {
-    int number;
+    long double number;
 
     cout << "Enter integer" << endl
     << "Number = " << endl;
@@ -105,7 +105,7 @@ static int get_number()
     return number;
 }
 
-static int get_digit_count(int number)
+static int get_digit_count(long double number)
 {
     int digit_count = 0;
 
@@ -117,28 +117,42 @@ static int get_digit_count(int number)
 
 }
 
-static int get_digit_sum(int number, int digit_count)
+static long double  get_digit_sum(long double  number, int digit_count)
 {
-    int sum_result = 0;
+    long double sum_result = 0;
 
     for (; 0 < digit_count; digit_count--)
     {
-        int const result = number / pow(10, digit_count - 1);
+        int const result = number / powl(10, digit_count - 1);
         sum_result += result;
 
-        number = number - result * pow(10, digit_count - 1);
+        number = number - result * powl(10, digit_count - 1);
     }
 
     cout << endl;
     return sum_result;
 }
 
+static int get_binary_number()
+{
+    
+}
+
 static void calculate_digit_sum()
 {
     cout << "\nExercise 2:" << endl;
 
-    int number = get_number();
+    long double number = get_number();
+
+    if (number < 0 || number != floorl(number))
+{
+        cout << "Error: wrong input";
+        return;
+}
     int digit_count = get_digit_count(number);
+
+    int binary_number = get_binary_number();
+    int binary_digit_count = get_digit_count(binary_number);
     cout << endl << "Sum of digits: " << get_digit_sum(number, digit_count);
 }
 
@@ -154,7 +168,7 @@ static void calculate_digit_sum()
 
 int main()
 {
-    int exercise_num = 5;
+    int exercise_num = 6;
 
     cout << "Autor: Ihar Yafimau (CZ/N 9:15)" << endl;
 
