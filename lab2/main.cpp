@@ -11,6 +11,8 @@ Data: 28.10.2026
 #include <cmath>
 #include <algorithm>
 #include <string>
+#include <sstream>
+#include <format>
 
 using namespace std;
 
@@ -42,7 +44,7 @@ static void first_row(int const row)
 
     for (int i = 1; i < row + 1; i++)
     {
-            cout << right << setw(4) << i;
+        cout << right << setw(4) << i;
     }
     cout << endl;
 }
@@ -78,14 +80,14 @@ static void multiplication_table()
     cout << "Exercise 1:" << endl << endl;
 
     int const row = get_rows_table();
-    if (row <= 0 )
+    if (row <= 0 || row > 17)
     {
         cout << "Error: wrong input";
         return;
     }
 
     int const column = get_columns_table();
-    if (column <= 0)
+    if (column <= 0 || column > 17)
     {
         cout << "Error: wrong input";
         return;
@@ -100,35 +102,23 @@ static long double get_number()
 {
     long double number;
 
-    cout << "Enter integer" << endl
+    cout << "Enter positive integer" << endl
     << "Number = " << endl;
     cin >> number;
 
     return number;
 }
 
-static int get_digit_count(unsigned long long number)
-{
-    int digit_count = 0;
-
-    for (; number >= 1; digit_count++)
-    {
-        number /= 10;
-    }
-    return digit_count;
-
-}
-
-static int get_digit_sum(unsigned long long number, int digit_count)
+static int get_digit_sum(unsigned long long number)
 {
     int sum_result = 0;
 
-    for (; 0 < digit_count; digit_count--)
+    while (number > 0)
     {
-        int const result = number / powl(10, digit_count - 1);
+        int const result = number % 10;
         sum_result += result;
 
-        number = number - result * powl(10, digit_count - 1);
+        number = (number - result) / 10;
     }
 
     cout << endl;
@@ -141,7 +131,8 @@ static unsigned long long get_binary_number(unsigned long long integer_number)
 
     while (integer_number > 0)
     {
-        if (integer_number % 2 == 0) {
+        if (integer_number % 2 == 0)
+        {
             str_binary_number += "0";
         }
         else
@@ -151,9 +142,21 @@ static unsigned long long get_binary_number(unsigned long long integer_number)
         integer_number /= 2;
     }
     reverse(str_binary_number.begin(), str_binary_number.end());
-    unsigned long long binary_number = stoull(str_binary_number);
 
-    return binary_number;
+    return stoull(str_binary_number);
+}
+
+static unsigned long long digit_sum_in_base(unsigned long long integer_number, int base)
+{
+    unsigned long long number = 0;
+
+    while (integer_number > 0)
+    {
+        number += integer_number % base;
+        integer_number /= base;
+    }
+
+    return number;
 }
 
 static void calculate_digit_sum()
@@ -162,18 +165,22 @@ static void calculate_digit_sum()
 
     long double number = get_number();
 
-    if (number < 0 || number != floorl(number))
+    if (number <= 0 || number != floorl(number))
 {
         cout << "Error: wrong input";
         return;
 }
-    unsigned long long integer_number = static_cast<unsigned long long>(number);
-    int digit_count = get_digit_count(integer_number);
-    cout << endl << "Sum of digits of " << integer_number << ":" << get_digit_sum(integer_number, digit_count) << endl;
+    auto const integer_number = static_cast<unsigned long long>(number);
+    cout << endl << "Sum of digits of " << integer_number << ":" << get_digit_sum(integer_number) << endl;
 
     unsigned long long binary_number = get_binary_number(integer_number);
-    digit_count = get_digit_count(binary_number);
-    cout << endl << "Sum of binary digits of " << binary_number << ":" << get_digit_sum(binary_number, digit_count) << endl;
+    cout << endl << "Sum of binary digits of " <<  binary_number << ":" << get_digit_sum(binary_number) << endl;
+
+    unsigned long long sum_octal_digit = digit_sum_in_base(integer_number,8);
+    cout << endl << "Sum of octagon digits of " << oct << integer_number << dec << ":" << endl << sum_octal_digit << endl;
+
+    unsigned long long sum_hex_digit = digit_sum_in_base(integer_number, 16);
+    cout << endl << "Sum of hexagon digits of " << hex << uppercase << integer_number << dec << ":" << endl << sum_hex_digit << endl;
 }
 
 //zad3
@@ -194,7 +201,7 @@ int main()
 
     while (exercise_num != 0)
     {
-        cout << "\n\nMENU" << endl << "Please enter number of exercise - 1, 2, 3, 4, or Exit - 0" << endl
+        cout << "\n\nMENU" << endl << "Please enter number of exercise - 1, 2, 3, 4, 5 or Exit - 0" << endl
         << "Number of exercise: " << endl;
         cin >> exercise_num;
 
@@ -209,6 +216,5 @@ int main()
                 break;
         }
     }
-
     return 0;
 }
