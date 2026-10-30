@@ -15,7 +15,7 @@ using namespace std;
 static int get_rows_table() {
 
     int row;
-    cout << "\nEnter number of rows" << endl
+    cout << "Enter number of rows" << endl
     << "Rows = " << endl;
     cin >> row;
 
@@ -65,17 +65,16 @@ static void vertical_line(int const column, int const row) {
 
 static void multiplication_table() {
 
-    cout << "Exercise 1:" << endl
-    << "Max size of table (17x17)";
+    cout << "Exercise 1:" << endl;
 
     int const row = get_rows_table();
-    if (row <= 0 || row > 17) {
+    if (row <= 0 ) {
         cout << "Error: wrong input";
         return;
     }
 
     int const column = get_columns_table();
-    if (column <= 0 || column > 17) {
+    if (column <= 0) {
         cout << "Error: wrong input";
         return;
     }
@@ -106,34 +105,24 @@ static int get_digit_count(int number) {
 
 static int get_digit_sum(int number, int digit_count) {
     int sum = 0;
-    for (int i = 0; i < digit_count; digit_count--)
-    {
-        int result = number / pow(10, digit_count - 1);
-        number = number - result * pow(10, digit_count - 1);
+    for (int i = 1; i < digit_count; digit_count--) {
+        if (number != 0 ) {
+            int result = number / pow(10, digit_count - 1);
 
-        sum += result;
+            sum += result;
+        }
     }
     return sum;
 }
 
 static void calculate_digit_sum() {
     cout << "Exercise 2:" << endl;
-//
-    unsigned long number = get_number();
+
+    int number = get_number();
     int digit_count = get_digit_count(number);
     cout << get_digit_sum(number, digit_count);
 }
 
-
-//zad3
-//do while
-//na początku liczymy, a potem sprawdzamy wyrazy ich warunek
-
-//zad 4
-//srand tylko jeden raz, na początku programu
-
-//zad 5
-// program pyta rozmiar klatki no i potem pyta o row or columns
 int main() {
     int exercise_num = 5;
 
