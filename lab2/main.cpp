@@ -13,6 +13,7 @@ Data: 28.10.2026
 #include <string>
 #include <sstream>
 #include <format>
+#include <windows.h>
 
 using namespace std;
 
@@ -75,19 +76,21 @@ static void vertical_line(int const column, int const row)
     }
 }
 
-static void multiplication_table()
+static void create_multiplication_table()
 {
     cout << "Exercise 1:" << endl << endl;
 
+    constexpr int max_table_size = 17;
     int const row = get_rows_table();
-    if (row <= 0 || row > 17)
+
+    if (row <= 0 || row > max_table_size)
     {
         cout << "Error: wrong input";
         return;
     }
 
     int const column = get_columns_table();
-    if (column <= 0 || column > 17)
+    if (column <= 0 || column > max_table_size)
     {
         cout << "Error: wrong input";
         return;
@@ -171,6 +174,7 @@ static void calculate_digit_sum()
         return;
 }
     auto const integer_number = static_cast<unsigned long long>(number);
+
     cout << endl << "Sum of digits of " << integer_number << ":" << get_digit_sum(integer_number) << endl;
 
     unsigned long long binary_number = get_binary_number(integer_number);
@@ -183,15 +187,256 @@ static void calculate_digit_sum()
     cout << endl << "Sum of hexagon digits of " << hex << uppercase << integer_number << dec << ":" << endl << sum_hex_digit << endl;
 }
 
-//zad3
-//do while
-//na początku liczymy, a potem sprawdzamy wyrazy ich warunek
 
-//zad 4
-//srand tylko jeden raz, na początku programu
+static double get_eps()
+{
+    double eps;
+    cout << "Enter the precision eps (eps < 0.1):" << endl;
+    cin >> eps;
 
-//zad 5
-// program pyta rozmiar klatki no i potem pyta o row or columns
+    cout << endl;
+
+    return eps;
+}
+
+static double leibniz_series(double const eps)
+{
+    double number;
+    double sum = 0;
+    int k = 1;
+    int sign = 1;
+
+    do
+    {
+        number = sign * 1.0 / (2.0 * k - 1.0);
+        sum += number;
+
+        k++;
+        sign *= -1;
+    }
+    while (fabs(number) >= eps);
+
+    return 4.0 * sum;
+}
+
+static double taylor_series(double const eps)
+{
+    double number;
+    double sum = 0;
+    int k = 0;
+    double factorial = 1;
+
+    do
+    {
+        number = 1.0 / factorial;
+        sum += number;
+
+        k++;
+        factorial *= k;
+    }
+    while (fabs(number) >= eps);
+
+    return sum;
+}
+
+static void compute_series_sums()
+{
+    cout << "\nExercise 3:" << endl;
+
+    double const eps = get_eps();
+
+    if (eps >= 0.1 || eps <= 0)
+    {
+        cout << "Error: wrong input";
+        return;
+    }
+
+    cout << "Sum with precision eps - S1:" << endl << leibniz_series(eps) << endl;
+    cout << "Sum with precision eps - S2:" << endl << taylor_series(eps) << endl;
+}
+
+static void get_limit(int &min_range, int &max_range)
+{
+    cout << "Enter the min and max of the range of possible integers:" << endl
+    << "min:" << endl;
+    cin >> min_range;
+
+    cout << "max:" << endl;
+    cin >> max_range;
+}
+
+static int get_num_count()
+{
+    int num;
+
+    cout << "Enter how many numbers to generate:" << endl;
+    cin >> num;
+
+    return num;
+}
+
+static void process_random_number()
+{
+    srand (time(NULL));
+
+    int min_range, max_range;
+    float negative_sum = 0;
+    float positive_sum = 0;
+    int negative_count = 0;
+    int positive_count = 0;
+
+    cout << "\nExercise 4:" << endl;
+
+    get_limit(min_range, max_range);
+    if (max_range < min_range)
+    {
+        cout << "Error: wrong input";
+        return;
+    }
+
+    int num_count = get_num_count();
+    if (num_count <= 0)
+    {
+        cout << "Error: wrong input";
+        return;
+    }
+
+    for (int i = 0 ; i < num_count; i++)
+    {
+        int rand_num = min_range + rand()%(max_range - min_range + 1);
+        cout << "rand_num " << "#" << i + 1 << ": " << rand_num << endl;
+
+        if (rand_num > 0)
+        {
+            positive_sum += rand_num;
+            positive_count++;
+        }
+        else if (rand_num < 0)
+        {
+            negative_sum += rand_num;
+            negative_count++;
+        }
+    }
+
+    cout << endl << "Count of positive: " << positive_count << endl;
+    if (positive_count != 0)
+    {
+        cout << "Average of positive: " << positive_sum / positive_count << endl;
+    }
+    else
+    {
+        cout << "Average of positive: cant calculate" << endl;
+    }
+
+    cout << endl << "Count of negative: " << negative_count << endl;
+    if (negative_count != 0)
+    {
+        cout << "Average of negative: " << negative_sum / negative_count << endl;
+    }
+    else
+    {
+        cout << "Average of negative: cant calculate" << endl;
+    }
+}
+
+static void get_square_size(int &square_width, int &square_height)
+{
+    cout << "Input square size" << endl
+    << "Square width: " << endl;
+    cin >> square_width;
+
+    cout << "Square height:" << endl;
+    cin >> square_height;
+}
+
+static void get_board_size(int &board_width, int &board_height)
+{
+    cout << "Enter the board size" << endl
+     << "Board width in squares:" << endl;
+    cin >> board_width;
+
+    cout << "Board height in squares" << endl;
+    cin >> board_height;
+}
+
+void enableColors()
+{
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    DWORD mode = 0;
+    if (!GetConsoleMode(hOut, &mode) ||
+        !SetConsoleMode(hOut, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING)) {
+        cout << "Colors are not supported in this console" << endl;
+        }
+}
+
+static void print_checker_board()
+{
+    enableColors();
+
+    const string RED = "\033[31m";
+    const string GREEN = "\033[32m";
+    const string CLEAR = "\033[0m";
+
+    cout << "\nExercise 5:" << endl;
+
+    int square_width, square_height, board_width, board_height;
+
+    get_square_size(square_width, square_height);
+    if (square_width <= 1 || square_height <= 1)
+    {
+        cout << "Error: Can't create a square";
+        return;
+    }
+
+    get_board_size(board_width, board_height);
+    if (board_width <= 1 || board_height <= 1)
+    {
+        cout << "Error: Can't create a board";
+        return;
+    }
+
+    string color = GREEN;
+
+    for (int i = 0; i < board_height; i++)
+    {
+        for (int j = 0; j < square_height; j++)
+        {
+            for (int k = 0; k < board_width; k++)
+            {
+                for (int l = 0; l < square_width; l++)
+                {
+                    if (color == GREEN)
+                    {
+                        cout << GREEN << "#";
+                    }
+                    else
+                    {
+                        cout << RED << "#";
+                    }
+                }
+
+                if (color == GREEN)
+                {
+                    color = RED;
+                }
+                else
+                {
+                    color = GREEN;
+                }
+            }
+            cout << endl;
+        }
+        if (color == GREEN)
+        {
+            color = RED;
+        }
+        else
+        {
+            color = GREEN;
+        }
+    }
+    cout << CLEAR;
+}
 
 int main()
 {
@@ -208,11 +453,23 @@ int main()
         switch (exercise_num)
         {
             case 1:
-                multiplication_table();
+                create_multiplication_table();
                 break;
 
             case 2:
                 calculate_digit_sum();
+                break;
+
+            case 3:
+                compute_series_sums();
+                break;
+
+            case 4:
+                process_random_number();
+                break;
+
+            case 5:
+                print_checker_board();
                 break;
         }
     }
