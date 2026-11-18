@@ -1,18 +1,89 @@
 #include <iostream>
+#include <string>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
-// TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+// #ifdef _WIN32
+//     SetConsoleOutputCP(CP_UTF8);
+// SetConsoleCP(CP_UTF8);
+// #endif
 
-int main() {
-    // TIP Press <shortcut actionId="RenameElement"/> when your caret is at the <b>lang</b> variable name to see how CLion can help you rename it.
+using namespace std;
 
-    const auto lang = "C++";
-    std::cout << "Hello and welcome to " << lang << "!\n";
+class player
+{
+public:
 
-    for (int i = 1; i <= 5; i++) {
-        // TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        std::cout << "i = " << i << std::endl;
+    string name;
+    int hp;
+    int power;
+
+    player(string name, int hp, int power) : name(name), hp(hp), power(power) {}
+
+    void show_stats()
+    {
+        cout << "\nHero name: " << name << endl
+        << "HP: " << hp << endl
+        << "Power: " << power << endl;
+    }
+
+    void lvlup()
+    {
+        hp += 10;
+        power += 5;
+        cout << "\nCongratulations! You get +10 HP and +5 Power" << endl;
+    }
+};
+
+static player character_creation()
+{
+    string name;
+    int hp, power;
+
+    cout << "Creating character" << endl
+    << "Hero name: " << endl;
+    cin >> name;
+
+    cout << "HP: " << endl;
+    cin >> hp;
+
+    cout << "Power: " << endl;
+    cin >> power;
+
+    cin.ignore();
+
+    return player(name, hp, power);
+}
+
+int main()
+{
+    string command;
+
+    player hero = character_creation();
+
+    while (true)
+    {
+        cout << "\nAllowed comands: stats, exit, lvlup" << endl;
+
+        getline(cin, command);
+
+        if (command == "stats")
+        {
+            hero.show_stats();
+        }
+
+        else if (command == "lvlup")
+        {
+            hero.lvlup();
+        }
+
+        else if (command == "exit")
+        {
+            break;
+        }
     }
 
     return 0;
-    // TIP See CLion help at <a href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>. Also, you can try interactive lessons for CLion by selecting 'Help | Learn IDE Features' from the main menu.
 }
+
