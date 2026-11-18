@@ -4,22 +4,30 @@ using namespace std;
 
 static void insertion_sort(int table[], int num)
 {
-    for ( int i = 0; i < num; i++)
-    {
-        for (int j = i; j < num; j++)
-        {
-            int key = table[j];
+    int j;
+    int key;
 
-            if (table[j] > table[j + 1])
+    for (int i = 1; i < num; i++)
+    {
+        key = table[i];
+
+        for (j = i - 1; j >= 0; j--)
+        {
+            if (table[j] > key)
             {
-                table[j] = table[j + 1];
-                table[j + 1] = key;
+                table[j + 1] = table[j];
+            }
+            else if (table[j] <= key)
+            {
+                break;
             }
         }
+
+        table[j + 1] = key;
     }
 }
 
-static void buble_sort(int table[], int num)
+static void bubble_sort(int table[], int num)
 {
     for (int i = 0; i < num - 1; i++)
     {
@@ -46,34 +54,35 @@ static void buble_sort(int table[], int num)
 
 static void selection_sort(int table[], int num)
 {
-    int min;
-    int j;
-    int two_num;
+    int min_index;
 
     for (int i = 0; i < num - 1; i++)
     {
-        min = table[i + 1];
+        min_index = i;
 
-        for (int j = 0; j < num - 1; j++)
+        for (int j = 1 + i; j < num; j++)
         {
-            if (min < table[j])
+            if (table[min_index] > table [j])
             {
-                min = table[j + 1];
+                min_index = j;
             }
         }
 
-        table[j] = table[i];
-        table[i] = min;
+        int test = table[min_index];
+
+        table[min_index] = table[i];
+        table[i] = test;
     }
 }
+
 
 int main()
 {
     int table[5] = {5, 1, 23, 6, 4};
 
-    // insertion_sort(table, 5);
-    // buble_sort(table, 5);
-    selection_sort(table, 5);
+    insertion_sort(table, 5);
+    // bubble_sort(table, 5);
+    //selection_sort(table, 5);
 
     cout << "[ ";
     for (int i = 0; i < 5; i++)
