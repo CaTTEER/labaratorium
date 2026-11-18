@@ -191,18 +191,29 @@ static void sort_array(float table[])
 
 static void get_letter_count()
 {
-    char table_letter[26][26] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", ""};
+    int table_letter[26] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-    while (true)
+    for (int key = 0; key != 103; key = getch())
     {
-        int key = getch();
-
-        if (key == 27)
-        {
-            cout << "ok";
-            break;
-        }
+        char letter = (char)key;
+        int index = key - 'A';
+        table_letter[index] += 1;
     }
+
+    for (int i = 0; i < 26; i++)
+    {
+        cout << "Letter " <<  << table_letter[i] << endl;
+    }
+
+
+
+        // if (key >= 'A' && key <= 'Z')
+        // {
+        //     table_letter[key - 'A']++;
+        // }
+        // cout << table_letter[key] << endl;
+
+
 }
 //Exercise 1
 // static void process_array(float table[])
