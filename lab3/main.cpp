@@ -11,6 +11,7 @@ Data: 16.11.2026
 #include <iostream>
 #include <iomanip>
 #include <time.h>
+#include <conio.h>
 
 using namespace std;
 
@@ -149,6 +150,7 @@ static void check_array_order(float table[])
     }
 }
 
+//exercise 2
 static void random_fill_array(float table[])
 {
     float min, max;
@@ -163,6 +165,43 @@ static void random_fill_array(float table[])
     for (int i = 0; i < ROZMIAR; i++)
     {
         table[i] = min + (max - min) * (rand() / (double)RAND_MAX);
+    }
+}
+
+//exercise 3
+static void sort_array(float table[])
+{
+    for (int i = 0; i < ROZMIAR - 1; i++)
+    {
+        int min_index = i;
+
+        for (int j = 1 + i; j < ROZMIAR; j++)
+        {
+            if (table[min_index] > table[j])
+            {
+                min_index = j;
+            }
+        }
+
+        float tmp = table[min_index];
+        table[min_index] = table[i];
+        table[i] = tmp;
+    }
+}
+
+static void get_letter_count()
+{
+    char table_letter[26][26] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", ""};
+
+    while (true)
+    {
+        int key = getch();
+
+        if (key == 27)
+        {
+            cout << "ok";
+            break;
+        }
     }
 }
 //Exercise 1
@@ -210,9 +249,10 @@ int main()
                     cout << "\nChoose option:" << endl
                     << "1 - Fill the array" << endl
                     << "2 - Fill the array randomly(ex2)" << endl
-                    << "3 - Print the array" << endl
-                    << "4 - Calculate the array" << endl
-                    << "5 - Check array order" << endl
+                    << "3 - Sort the array(ex3)" << endl
+                    << "4 - Print the array" << endl
+                    << "5 - Calculate the array" << endl
+                    << "6 - Check array order" << endl
                     << "0 - Exit" << endl << endl;
 
                     cin >> ex_num;
@@ -230,14 +270,18 @@ int main()
                             continue;
 
                         case 3:
-                            print_array(table);
+                            sort_array(table);
                             continue;
 
                         case 4:
-                            calculate_array(table);
+                            print_array(table);
                             continue;
 
                         case 5:
+                            calculate_array(table);
+                            continue;
+
+                        case 6:
                             check_array_order(table);
                             continue;
 
@@ -245,6 +289,14 @@ int main()
                             break;
                     }
                 }
+
+            case 4:
+                get_letter_count();
+                continue;
+
+            case 0:
+                return 0;
         }
+
     }
 }
