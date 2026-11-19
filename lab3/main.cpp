@@ -189,31 +189,51 @@ static void sort_array(float table[])
     }
 }
 
+//exercise 4
 static void get_letter_count()
 {
     int table_letter[26] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    int index;
+    int letters_amount = 0;
+    string word = "";
 
-    for (int key = 0; key != 103; key = getch())
+    cout << "Enter letters (Esc to exit)" << endl;
+
+    for (int key = 0; key != 27; key = getch())
     {
-        char letter = (char)key;
-        int index = key - 'A';
+        if (key >= 'A' &&  key <= 'Z')
+        {
+            index = key - 'A';
+            word += 'A' + index;
+        }
+        else
+        {
+            index = key - 'a';
+            word += 'a' +  index;
+        }
+
+        letters_amount += 1;
         table_letter[index] += 1;
     }
 
+    cout << "\nEntered text:" << word << endl << endl;
+    cout << "Letters Amount =" << letters_amount << endl << endl;
+
     for (int i = 0; i < 26; i++)
     {
-        cout << "Letter " <<  << table_letter[i] << endl;
+        if (table_letter[i] >= 0)
+        {
+
+            cout << "Letter " << char(i + 65) << " " << table_letter[i] << " ";
+
+            for (int j = 0; table_letter[i] > j ; j++)
+            {
+                cout << "#";
+            }
+            cout << endl;
+        }
+
     }
-
-
-
-        // if (key >= 'A' && key <= 'Z')
-        // {
-        //     table_letter[key - 'A']++;
-        // }
-        // cout << table_letter[key] << endl;
-
-
 }
 //Exercise 1
 // static void process_array(float table[])
@@ -242,7 +262,8 @@ int main()
     srand (time(NULL));
 
     float table[ROZMIAR];
-    int ex_num;
+
+    int ex_num, ex_num_one;
 
     while (true)
     {
@@ -300,6 +321,7 @@ int main()
                             break;
                     }
                 }
+                break;
 
             case 4:
                 get_letter_count();
@@ -308,6 +330,5 @@ int main()
             case 0:
                 return 0;
         }
-
     }
 }
